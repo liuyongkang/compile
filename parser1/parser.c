@@ -25,6 +25,10 @@ void expr()
 {
 	term();
 	while (1) {
+		if (isdigit(lookahead)) {
+			printf("\n只支持一位数\n");
+			exit(1);
+		}
 		switch(lookahead) {
 		case '+':
 			match('+');
@@ -36,8 +40,11 @@ void expr()
 			term();
 			printf("-");
 			break;
-		default:
+		case '\n':
 			return;
+		default:
+			printf("\n语法错误，含有非法字符\n");
+			exit(1);
 		}
 	}
 }
@@ -48,7 +55,7 @@ void term()
 		printf("%c", lookahead);
 		match(lookahead);
 	} else {
-		printf("syntax error");
+		printf("\n语法错误，缺少操作数\n");
 		exit(1);
 	}
 }
@@ -58,8 +65,8 @@ void match(char t)
 	if (lookahead == t) {
 		scanf("%c", &lookahead);
 	} else {
-		printf("syntax error");
-		exit(2);
+		printf("\n只支持一位数\n");
+		exit(1);
 	}
 }
 
@@ -71,4 +78,3 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
-
