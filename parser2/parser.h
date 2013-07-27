@@ -24,6 +24,9 @@ void expr();
 /*匹配term*/
 void term();
 
+/*匹配unary*/
+void unary();
+
 /*匹配factor*/
 void factor();
 

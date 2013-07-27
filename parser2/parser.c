@@ -24,7 +24,7 @@ char s[MAX];
 
 void expr()
 {
-	factor();
+	unary();
 	while(s[lookahead]) {
 		switch(s[lookahead]) {
 			case '+':
@@ -49,23 +49,41 @@ void expr()
 
 void term()
 {
-	factor();
+	unary();
 	while (s[lookahead]) {
 		switch(s[lookahead]) {
 			case '*':
 				match('*');
-				factor();
+				unary();
 				printf("*");
 				break;
 			case '/':
 				match('/');
-				factor();
+				unary();
 				printf("/");
 				break;
 			default:
-				factor();
+				unary();
 				return;
 		}
+	}
+}
+
+void unary()
+{
+	switch(s[lookahead]) {
+		case '+':
+			match('+');
+			factor();
+			break;
+		case '-':
+			match('-');
+			printf("0");
+			factor();
+			printf("-");
+			break;
+		default:
+			factor();
 	}
 }
 
