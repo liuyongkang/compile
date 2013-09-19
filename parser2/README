@@ -1,0 +1,15 @@
+该程序为一个简单的语法分析器，将含有+(unary & binary),-(unary & binary),*,\,(和)的中缀表达式转换为后缀表达式
+文法：
+	
+	expr → expr + term
+	     | expr - term
+	     | term
+	term → term * unary
+	     | term / unary
+	     | unary
+	unary → +factor
+	      | -factor
+	      | factor
+	factor → (expr)
+	       | digit
+	digit → 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9

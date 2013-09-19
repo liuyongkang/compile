@@ -27,22 +27,22 @@ void expr()
 	unary();
 	while(s[lookahead]) {
 		switch(s[lookahead]) {
-			case '+':
-				match('+');
-				term();
-				printf("+");
-				break;
-			case '-':
-				match('-');
-				term();
-				printf("-");
-				break;
-			case '*':
-			case '/':
-				term();
-				break;
-			case ')':
-				return;
+		case '+':
+			match('+');
+			term();
+			printf("+");
+			break;
+		case '-':
+			match('-');
+			term();
+			printf("-");
+			break;
+		case '*':
+		case '/':
+			term();
+			break;
+		case ')':
+			return;
 		}
 	}	
 }
@@ -52,19 +52,19 @@ void term()
 	unary();
 	while (s[lookahead]) {
 		switch(s[lookahead]) {
-			case '*':
-				match('*');
-				unary();
-				printf("*");
-				break;
-			case '/':
-				match('/');
-				unary();
-				printf("/");
-				break;
-			default:
-				unary();
-				return;
+		case '*':
+			match('*');
+			unary();
+			printf("*");
+			break;
+		case '/':
+			match('/');
+			unary();
+			printf("/");
+			break;
+		default:
+			unary();
+			return;
 		}
 	}
 }
@@ -72,34 +72,34 @@ void term()
 void unary()
 {
 	switch(s[lookahead]) {
-		case '+':
-			match('+');
-			factor();
-			break;
-		case '-':
-			match('-');
-			printf("0");
-			factor();
-			printf("-");
-			break;
-		default:
-			factor();
+	case '+':
+		match('+');
+		factor();
+		break;
+	case '-':
+		match('-');
+		printf("0");
+		factor();
+		printf("-");
+		break;
+	default:
+		factor();
 	}
 }
 
 void factor()
 {
 	switch(s[lookahead]) {
-		case '(':
-			match('(');
-			expr();
-			match(')');
-			break;
-		default:
-			if (isdigit(s[lookahead])) {
-				printf("%c", s[lookahead]);
-				match(s[lookahead]);
-			}
+	case '(':
+		match('(');
+		expr();
+		match(')');
+		break;
+	default:
+		if (isdigit(s[lookahead])) {
+			printf("%c", s[lookahead]);
+			match(s[lookahead]);
+		}
 	}
 }
 
