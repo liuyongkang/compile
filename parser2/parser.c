@@ -25,8 +25,8 @@ char s[MAX];
 void expr()
 {
 	unary();
-	while(s[lookahead]) {
-		switch(s[lookahead]) {
+	while (s[lookahead]) {
+		switch (s[lookahead]) {
 		case '+':
 			match('+');
 			term();
@@ -51,7 +51,7 @@ void term()
 {
 	unary();
 	while (s[lookahead]) {
-		switch(s[lookahead]) {
+		switch (s[lookahead]) {
 		case '*':
 			match('*');
 			unary();
@@ -71,7 +71,7 @@ void term()
 
 void unary()
 {
-	switch(s[lookahead]) {
+	switch (s[lookahead]) {
 	case '+':
 		match('+');
 		factor();
@@ -89,7 +89,7 @@ void unary()
 
 void factor()
 {
-	switch(s[lookahead]) {
+	switch (s[lookahead]) {
 	case '(':
 		match('(');
 		expr();
