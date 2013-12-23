@@ -19,11 +19,16 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-char lookahead;
+static char lookahead;
 
 void expr()
 {
 	term();
+	rest();
+}
+
+void rest()
+{
 	while (1) {
 		if (isdigit(lookahead)) {
 			printf("\n只支持一位数\n");

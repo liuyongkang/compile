@@ -14,14 +14,20 @@
  * =====================================================================================
  */
 
-
-extern char lookahead; 	//向前看符号
+#ifndef PARSER_H_
+#define PARSER_H_
 
 /*判断表达式*/
 void expr();
+
+/*剩余部分*/
+void rest();
 
 /*判断词法单元*/
 void term();
 
 /*匹配词法单元*/
 void match(char t);
+
+#endif // PARSER_H_
+
