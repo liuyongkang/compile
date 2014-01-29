@@ -65,21 +65,30 @@ val_t F(state *s)
 	case LBR:
 		parse(s);
 		val = E(s);
-		parse(s);
 
+		if (s->next != RBR) {
+			if (s->err == NO) {
+				s->err = LACK_RBR;
+				s->next = ERR;
+			}
+			return 0;
+		}
+		parse(s);
 		return val;
 	case NUM:
 		parse(s);
 		return s->val;
+	case RBR:
 	case ADD:
 	case SUB:
 	case MUL:
 	case DIV:
-	case RBR:
 	case END:
-	case ERR:
+		s->err = LACK_OPD;
+		s->next = ERR;
 		break;
 	}
+	return 0;
 }
 
 val_t T_(state *s)
@@ -99,9 +108,14 @@ val_t T_(state *s)
 	case SUB:
 	case RBR:
 	case END:
-		return val;
+	case ERR:
+		break;
+	case LBR:
+		s->err = LACK_OPT;
+		s->next = ERR;
 		break;
 	}
+	return val;
 }
 
 val_t T(state *s)
@@ -109,17 +123,21 @@ val_t T(state *s)
 	switch (s->next) {
 	case LBR:
 	case NUM:
-		F(s);
+		s->val = F(s);
 		return T_(s);
+	case END:
+	case ERR:
+		break;
 	case ADD:
 	case SUB:
 	case MUL:
 	case DIV:
 	case RBR:
-	case END:
-	case ERR:
+		s->err = LACK_OPD;
+		s->next = ERR;
 		break;
 	}
+	return 0;
 }
 
 val_t E_(state *s)
@@ -137,14 +155,15 @@ val_t E_(state *s)
 		return E_(s);
 	case RBR:
 	case END:
-		return val;
 	case ERR:
-	case MUL:
-	case DIV:
+		break;
 	case LBR:
 	case NUM:
+		s->err = LACK_OPT;
+		s->next = ERR;
 		break;
 	}
+	return val;
 }
 
 val_t E(state *s)
@@ -154,44 +173,48 @@ val_t E(state *s)
 	case NUM:
 		s->val = T(s);
 		return E_(s);
+	case END:
+	case ERR:
+		break;
 	case ADD:
 	case SUB:
 	case MUL:
 	case DIV:
 	case RBR:
-	case END:
-	case ERR:
+		s->err = LACK_OPD;
+		s->next = ERR;
 		break;
 	}
-}
-
-val_t calc(const char *str, val_t *ans)
-{
-	state s = {str, 0};
-
-	parse(&s);
-	E(&s);
-	*ans = s.val;
-
-	return s.err;
+	return 0;
 }
 
 int main(void)
 {
 	char str[n];
-	val_t ans;
-	int err;
 
+	char *err_msg[] = {"",
+			   "lack operand",
+			   "lack operator",
+			   "lack left bracket",
+			   "lack right bracket"};
+
+	printf(">");
 	while(fgets(str, n, stdin)) {
-		err = calc(str, &ans);
-		if (err) {
+		state s = {str, 0, 0, NO, 0};
+		parse(&s);
+		E(&s);
 		
+		if (!s.err && s.next != END) {
+			s.err = LACK_LBR;
+		}
+
+		if (s.err) {
+			printf("%s%*c  %s\n>", s.p, s.pos, '^', err_msg[s.err]);
 		} else {
-			printf(" %lf\n", ans);
+			printf("%lf\n>", s.val);
 		}
 	}
 
-	return;
+	return 0;
 }
-
 

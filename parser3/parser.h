@@ -35,6 +35,10 @@ typedef enum {
 
 typedef enum {
 	NO,
+	LACK_OPD,
+	LACK_OPT,
+	LACK_LBR,
+	LACK_RBR
 } ERROR;
 
 typedef struct {
